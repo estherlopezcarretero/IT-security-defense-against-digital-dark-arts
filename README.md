@@ -1,21 +1,250 @@
-# Security Infrastructure Design [cite: 2]
+# Security Infrastructure Design
 
-## Project Description
-[cite_start]This repository contains the security infrastructure design document authored by Esther López Carretero[cite: 1, 2]. [cite_start]The goal is to minimize risk through the implementation of effective measures to protect a 50-employee company handling payment data[cite: 3, 4].
+## Overview
+This project presents a **security infrastructure design for a company with approximately 50 employees handling payment data**.  
+The objective is to **reduce security risks and protect sensitive financial information** by implementing layered cybersecurity controls across authentication, network infrastructure, endpoint security, and internal policies.
 
-## Network & Web Security
-* [cite_start]**External Web Security:** Uses the HTTPS protocol which utilizes TLS 1.2 and AES encryption[cite: 13]. [cite_start]The HTTPS protocol permits secure communications and authentication over a network[cite: 14]. [cite_start]Using TLS 1.2 ensures data being transmitted is protected from potential eavesdroppers, authenticates both parties communicating, and checks the integrity of messages so they aren't lost or altered in transit[cite: 15, 16]. [cite_start]Advanced Encryption Standard (AES) is a symmetric block cipher that uses a 128-bit key size and supports key lengths of 128, 192, or 256 bit[cite: 17]. [cite_start]This stops man-in-the-middle attacks[cite: 18].
-* [cite_start]**Internal Web Security:** Uses a centralized system, the Lightweight Directory Access Protocol (LDAP), which acts as a central phonebook of users[cite: 19, 21]. [cite_start]To ensure the password remains unreadable if an attacker uses packet sniffing or promiscuous mode, the system uses StartTLS to provide encryption[cite: 22, 23].
-* [cite_start]**Remote Access Solution:** Uses VPN with L2TP/IPsec in Tunnel Mode[cite: 24, 25]. [cite_start]IPsec encrypts and encapsulates an IP packet, and then Tunnel Mode takes over to encrypt and encapsulate the entire IP packet[cite: 26, 27]. [cite_start]This allows employees to work from home safely without exposing internal servers to the internet, stopping data theft or ransomware attacks[cite: 28, 29].
-* [cite_start]**Firewall Configuration:** A firewall is installed with implicit deny[cite: 31]. [cite_start]It filters and inspects packets of data attempting to enter and exit[cite: 32]. [cite_start]Implicit deny is a concept where anything not explicitly permitted or allowed should be denied[cite: 33]. [cite_start]This stops phishing, spam, and malware[cite: 34].
-* [cite_start]**Wireless Security:** To protect against evil twin or rogue AP attacks, the solution uses WPA2-Enterprise (802.1X)[cite: 36]. [cite_start]Each employee uses their own user to connect to WiFi, eliminating the risk of stolen pre-shared keys and shared passwords that might be written on a Post-it[cite: 37, 38]. [cite_start]This stops brute force, dictionary attacks, and rainbow tables[cite: 39].
-* [cite_start]**VLAN Configuration:** Creates three VLANs: for employees, for guests, and a quarantine VLAN to exclude suspicious devices during an incident[cite: 41, 42, 43, 44]. [cite_start]This ensures that if an employee accidentally downloads malware, it won't infect the payment servers[cite: 45].
+The document proposes a **defense-in-depth strategy** combining encryption, network segmentation, secure authentication, monitoring systems, and security policies.
 
-## Device Security & Monitoring
-* [cite_start]**Laptop Security:** Uses full disk encryption (FDE) and screen locks[cite: 46, 47]. [cite_start]FDE automatically converts data on a hard drive into a form that cannot be understood without the key[cite: 49]. [cite_start]If an attacker has physical access to the disk, FDE protects from data theft and unauthorized tampering[cite: 50]. [cite_start]Enforces automatic screen locks after 5 minutes of inactivity to prevent impersonation[cite: 52].
-* [cite_start]**Intrusion Detection/Prevention:** Installs an IDS (Intrusion Detection System) that operates by monitoring network traffic and analyzing it to look for characteristics indicating malicious traffic[cite: 63, 64, 65]. [cite_start]To stop the malicious traffic, a NIPS (Network Intrusion Prevention System) takes action by blocking or dropping the traffic[cite: 66, 67]. [cite_start]It alerts us if someone is attempting to attack the customer database[cite: 68].
+---
 
-## Corporate Policies & Procedures
-* [cite_start]**Authentication System:** Requires a good password policy including length requirements, character complexity, and checking for the presence of dictionary words[cite: 5, 6]. [cite_start]Requires Multifactor authentication, where users present multiple pieces of information, along with TOTP, which randomly generates a value in conjunction with the current time[cite: 8, 9]. [cite_start]This stops brute force attacks even if the password is discovered[cite: 10]. 
-* [cite_start]**Application Policy:** Restricting risky software, file-sharing, or piracy apps should be banned because they often carry malware[cite: 53, 54]. [cite_start]Uses whitelisting, where only approved software is allowed to run, which is effective against unknown or new malware[cite: 55, 56].
-* [cite_start]**Privacy & Security Policy:** For network security, recommends penetration testing to verify the system in place by attempting to break into it[cite: 57, 58]. [cite_start]Implements the principle of least privilege, where access to sensitive data should be denied by default[cite: 59, 60]. [cite_start]Anyone who needs it must submit a request with clear justification, specifying which data is required and for how long, reducing human error[cite: 61, 62].
+## Objectives
+
+- Protect sensitive **payment and customer data**
+- Reduce the risk of **data breaches, ransomware, and unauthorized access**
+- Secure both **internal and external network communications**
+- Provide safe **remote access for employees**
+- Implement **monitoring and incident detection mechanisms**
+- Enforce strong **organizational security policies**
+
+---
+
+## Security Architecture
+
+The proposed infrastructure includes several security layers designed to protect systems, users, and data.
+
+### 1. Authentication System
+
+A secure authentication framework is implemented with:
+
+- **Strong password policy**
+  - Minimum length requirements
+  - Character complexity
+  - Dictionary word detection
+
+- **Multi-Factor Authentication (MFA)**
+  - Password + additional authentication factors
+
+- **TOTP (Time-Based One-Time Password)**
+  - Time-synchronized one-time codes
+  - Prevents brute-force attacks even if passwords are compromised
+
+This ensures that only verified users can access internal systems and applications.
+
+---
+
+### 2. Website Security
+
+#### External Website Security
+
+External services use **HTTPS with TLS 1.2 and AES encryption**.
+
+Security benefits include:
+
+- Confidentiality of transmitted data
+- Mutual authentication between systems
+- Message integrity validation
+
+AES encryption supports key sizes of **128, 192, or 256 bits**, protecting communications from interception and tampering.
+
+This configuration helps prevent **Man-in-the-Middle (MITM) attacks**.
+
+---
+
+#### Internal Website Security
+
+Internal authentication is managed using **LDAP (Lightweight Directory Access Protocol)**.
+
+LDAP acts as a **centralized directory service**, storing user credentials and access information.
+
+To prevent credential interception via packet sniffing:
+
+- **StartTLS encryption** is implemented
+
+This ensures that authentication data is encrypted during transmission.
+
+---
+
+### 3. Secure Remote Access
+
+Remote workers connect through a **VPN using L2TP/IPsec in Tunnel Mode**.
+
+Key security properties:
+
+- **IPsec encryption of IP packets**
+- Full packet encapsulation via **Tunnel Mode**
+- Protection against interception over public networks
+
+This allows employees to work remotely without exposing internal infrastructure directly to the internet.
+
+---
+
+### 4. Firewall Configuration
+
+The network perimeter is protected with a firewall configured with:
+
+- **Implicit deny policy**
+- Only explicitly authorized traffic is permitted
+
+Firewall responsibilities include:
+
+- Packet inspection
+- Traffic filtering
+- Blocking malicious connections
+
+This helps prevent:
+
+- Malware
+- Phishing attempts
+- Spam-based attacks
+
+---
+
+### 5. Wireless Network Security
+
+To secure the corporate Wi-Fi network, the infrastructure uses:
+
+**WPA2-Enterprise (802.1X)**
+
+Advantages include:
+
+- Individual authentication per user
+- No shared Wi-Fi passwords
+- Integration with enterprise authentication systems
+
+This approach reduces the risk of:
+
+- Rogue access points
+- Evil twin attacks
+- Brute force and dictionary attacks
+- Rainbow table attacks
+
+---
+
+### 6. Network Segmentation (VLANs)
+
+The internal network is segmented using **Virtual Local Area Networks (VLANs)**:
+
+| VLAN | Purpose |
+|-----|------|
+| Employee VLAN | Internal employee devices |
+| Guest VLAN | Visitor network access |
+| Quarantine VLAN | Isolated network for suspicious devices |
+
+Network segmentation prevents malware or compromised devices from spreading to sensitive systems such as payment servers.
+
+---
+
+### 7. Endpoint Security (Laptops)
+
+Employee devices implement the following protections:
+
+- **Full Disk Encryption (FDE)**
+- **Automatic screen lock after 5 minutes of inactivity**
+
+Full Disk Encryption ensures that data remains unreadable without the correct decryption key, protecting against **data theft from lost or stolen devices**.
+
+---
+
+### 8. Application Security Policies
+
+Risky applications are restricted through:
+
+- **Application whitelisting**
+- Blocking of:
+  - File-sharing software
+  - Piracy applications
+  - Untrusted software
+
+This approach prevents the execution of unknown or malicious programs.
+
+---
+
+### 9. Security and Privacy Policies
+
+Organizational policies include:
+
+#### Penetration Testing
+Regular penetration tests are conducted to identify vulnerabilities in the infrastructure.
+
+#### Principle of Least Privilege (PoLP)
+
+Access to sensitive information is granted only when necessary.
+
+Employees must:
+
+- Request access
+- Provide justification
+- Specify required data and duration
+
+This minimizes risks caused by **human error or privilege misuse**.
+
+---
+
+### 10. Intrusion Detection and Prevention
+
+To monitor network activity and protect customer databases:
+
+- **IDS (Intrusion Detection System)** monitors network traffic
+- **NIPS (Network Intrusion Prevention System)** actively blocks malicious traffic
+
+These systems detect:
+
+- Suspicious traffic patterns
+- Unauthorized access attempts
+- Potential attacks targeting customer data
+
+---
+
+## Security Benefits
+
+The proposed architecture provides protection against:
+
+- Brute-force attacks
+- Man-in-the-middle attacks
+- Credential theft
+- Malware infections
+- Rogue wireless access points
+- Unauthorized internal access
+- Data exfiltration
+- Ransomware attacks
+
+---
+
+## Technologies Used
+
+- HTTPS
+- TLS 1.2
+- AES Encryption
+- LDAP
+- StartTLS
+- VPN (L2TP/IPsec)
+- Firewall with implicit deny
+- WPA2-Enterprise (802.1X)
+- VLAN segmentation
+- Full Disk Encryption
+- IDS / NIPS
+
+---
+
+## Conclusion
+
+This security infrastructure design provides a **layered cybersecurity strategy** suitable for a small-to-medium company handling sensitive payment information.
+
+By combining **secure authentication, encrypted communication, network segmentation, monitoring systems, and strict access policies**, the company can significantly reduce the risk of cyberattacks and protect both business and customer data.
+
+---
+
+## Author
+
+Esther López Carretero
