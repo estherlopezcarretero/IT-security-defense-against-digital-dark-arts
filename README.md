@@ -1,4 +1,4 @@
-# [cite_start]Security Infrastructure Design [cite: 2]
+# Security Infrastructure Design [cite: 2]
 
 ## Project Description
 [cite_start]This repository contains the security infrastructure design document authored by Esther López Carretero[cite: 1, 2]. [cite_start]The goal is to minimize risk through the implementation of effective measures to protect a 50-employee company handling payment data[cite: 3, 4].
